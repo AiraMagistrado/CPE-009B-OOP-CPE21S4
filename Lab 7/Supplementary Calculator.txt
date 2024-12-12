@@ -1,0 +1,159 @@
+
+from tkinter import *
+from tkinter import messagebox
+import math
+
+class MyWindow:
+    def __init__(self, win):
+        self.Label1 = Label(win, bg="Orange", fg="Black", text="Calculator", font=("Impact", 35))
+        self.Label1.place(x=100, y=10)
+
+        self.Label2 = Label(win, bg="Orange", fg="Black", text="Number 1:", font=("Impact", 18))
+        self.Label2.place(x=75, y=90)
+        self.Entry1 = Entry(win, bd=8)
+        self.Entry1.place(x=190, y=90)
+
+        self.Label3 = Label(win, bg="Orange", fg="Black", text="Number 2:", font=("Impact", 18))
+        self.Label3.place(x=75, y=130)
+        self.Entry2 = Entry(win, bd=8)
+        self.Entry2.place(x=190, y=130)
+
+        self.Label4 = Label(win, bg="Orange", fg="Black", text="Result:", font=("Impact", 18))
+        self.Label4.place(x=75, y=170)
+        self.Entry3 = Entry(win, bd=8)
+        self.Entry3.place(x=190, y=170)
+
+        self.Button1 = Button(win, bd=4, bg="LightGreen", fg="Black", text="ADD", font=("Impact", 14), command=self.add)
+        self.Button1.place(x=30, y=230)
+        self.Button2 = Button(win, bd=4, bg="LightBlue", fg="Black", text="SUBTRACT", font=("Impact", 14), command=self.sub)
+        self.Button2.place(x=90, y=230)
+        self.Button3 = Button(win, bd=4, bg="Brown", fg="Black", text="MULTIPLY", font=("Impact", 14), command=self.multiply)
+        self.Button3.place(x=190, y=230)
+        self.Button4 = Button(win, bd=4, bg="Gray", fg="Black", text="DIVIDE", font=("Impact", 14), command=self.divide)
+        self.Button4.place(x=285, y=230)
+
+        self.Button5 = Button(win, bd=4, bg="Purple", fg="Black", text="SQRT", font=("Impact", 14), command=self.sqrt)
+        self.Button5.place(x=30, y=280)
+        self.Button6 = Button(win, bd=4, bg="Blue", fg="Black", text="POWER", font=("Impact", 14), command=self.power)
+        self.Button6.place(x=120, y=280)
+
+        # Buttons for trigonometric functions
+        self.ButtonSin = Button(win, bd=4, bg="LightPink", fg="Black", text="SIN", font=("Impact", 14), command=self.sine)
+        self.ButtonSin.place(x=220, y=280)
+        self.ButtonCos = Button(win, bd=4, bg="LightPink", fg="Black", text="COS", font=("Impact", 14), command=self.cosine)
+        self.ButtonCos.place(x=30, y=330)
+        self.ButtonTan = Button(win, bd=4, bg="LightPink", fg="Black", text="TAN", font=("Impact", 14), command=self.tangent)
+        self.ButtonTan.place(x=120, y=330)
+
+        self.ClearButton = Button(win, bd=4, bg="Orange", fg="Black", text="CLEAR", font=("Impact", 14), command=self.clear)
+        self.ClearButton.place(x=220, y=330)
+
+        self.history_text = Text(win, height=10, width=40, font=("Arial", 10))
+        self.history_text.place(x=50, y=380)
+        self.history_text.insert(END, "History of Operations:\n")
+
+    def validate_input(self, entry):
+        try:
+            return float(entry.get())
+        except ValueError:
+            messagebox.showerror("Invalid input", "Please enter valid numbers.")
+            return None
+
+    def add(self):
+        num1 = self.validate_input(self.Entry1)
+        num2 = self.validate_input(self.Entry2)
+        if num1 is not None and num2 is not None:
+            result = num1 + num2
+            self.Entry3.delete(0, 'end')
+            self.Entry3.insert(END, str(result))
+            self.add_to_history(f"{num1} + {num2} = {result}")
+
+    def sub(self):
+        num1 = self.validate_input(self.Entry1)
+        num2 = self.validate_input(self.Entry2)
+        if num1 is not None and num2 is not None:
+            result = num1 - num2
+            self.Entry3.delete(0, 'end')
+            self.Entry3.insert(END, str(result))
+            self.add_to_history(f"{num1} - {num2} = {result}")
+
+    def multiply(self):
+        num1 = self.validate_input(self.Entry1)
+        num2 = self.validate_input(self.Entry2)
+        if num1 is not None and num2 is not None:
+            result = num1 * num2
+            self.Entry3.delete(0, 'end')
+            self.Entry3.insert(END, str(result))
+            self.add_to_history(f"{num1} * {num2} = {result}")
+
+    def divide(self):
+        num1 = self.validate_input(self.Entry1)
+        num2 = self.validate_input(self.Entry2)
+        if num1 is not None and num2 is not None:
+            if num2 == 0:
+                self.Entry3.insert(END, "Error! Division by zero.")
+                self.add_to_history("Error! Division by zero.")
+            else:
+                result = num1 / num2
+                self.Entry3.delete(0, 'end')
+                self.Entry3.insert(END, str(result))
+                self.add_to_history(f"{num1} / {num2} = {result}")
+
+    def sqrt(self):
+        num1 = self.validate_input(self.Entry1)
+        if num1 is not None:
+            result = math.sqrt(num1)
+            self.Entry3.delete(0, 'end')
+            self.Entry3.insert(END, str(result))
+            self.add_to_history(f"√{num1} = {result}")
+
+    def power(self):
+        num1 = self.validate_input(self.Entry1)
+        num2 = self.validate_input(self.Entry2)
+        if num1 is not None and num2 is not None:
+            result = num1 ** num2
+            self.Entry3.delete(0, 'end')
+            self.Entry3.insert(END, str(result))
+            self.add_to_history(f"{num1} ^ {num2} = {result}")
+
+    def sine(self):
+        num1 = self.validate_input(self.Entry1)
+        if num1 is not None:
+            result = math.sin(math.radians(num1))
+            self.Entry3.delete(0, 'end')
+            self.Entry3.insert(END, str(result))
+            self.add_to_history(f"sin({num1}) = {result}")
+
+    def cosine(self):
+        num1 = self.validate_input(self.Entry1)
+        if num1 is not None:
+            result = math.cos(math.radians(num1))
+            self.Entry3.delete(0, 'end')
+            self.Entry3.insert(END, str(result))
+            self.add_to_history(f"cos({num1}) = {result}")
+
+    def tangent(self):
+        num1 = self.validate_input(self.Entry1)
+        if num1 is not None:
+            result = math.tan(math.radians(num1))
+            self.Entry3.delete(0, 'end')
+            self.Entry3.insert(END, str(result))
+            self.add_to_history(f"tan({num1}) = {result}")
+
+    def clear(self):
+        self.Entry1.delete(0, 'end')
+        self.Entry2.delete(0, 'end')
+        self.Entry3.delete(0, 'end')
+        self.history_text.delete("2.0", END)
+
+    def add_to_history(self, operation):
+        self.history_text.insert(END, operation + "\n")
+
+window = Tk()
+MyWindow = MyWindow(window)
+
+window.geometry("400x600")
+window.title("Enhanced Calculator")
+window.configure(bg='Orange')
+
+window.mainloop()
